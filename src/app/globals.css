@@ -124,12 +124,20 @@
 
   html {
     @apply font-sans;
+    font-size: 100%;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (min-width: 1920px) {
+    html {
+      font-size: 112.5%;
+    }
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-inter), sans-serif;
-    font-size: 14px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }

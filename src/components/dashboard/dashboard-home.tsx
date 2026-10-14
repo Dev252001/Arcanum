@@ -9,6 +9,8 @@ import {
   Trophy,
 } from "lucide-react";
 
+import { PageContainer } from "@/components/layout/page-container";
+import { PageHeading } from "@/components/layout/page-heading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const stats = [
@@ -67,32 +69,26 @@ const subjects = [
 
 export function DashboardHome() {
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8">
-      <section className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-        <div className="space-y-2">
+    <PageContainer>
+      <PageHeading
+        eyebrow={
           <p className="flex items-center gap-2 text-sm text-muted-foreground">
             <span className="size-2 rounded-full bg-foreground/60" />
             YOUR LEARNING WORKSPACE
           </p>
-
-          <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
-            Build your edge.
-          </h1>
-
-          <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-            Strengthen your fundamentals, practice with purpose, and prepare for
-            your next technical interview.
-          </p>
-        </div>
-
-        <Link
-          href="/practice"
-          className="inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto"
-        >
-          Start practicing
-          <ArrowRight className="ml-2 size-4" />
-        </Link>
-      </section>
+        }
+        title="Build your edge."
+        description="Strengthen your fundamentals, practice with purpose, and prepare for your next technical interview."
+        actions={
+          <Link
+            href="/practice"
+            className="inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto"
+          >
+            Start practicing
+            <ArrowRight className="ml-2 size-4" />
+          </Link>
+        }
+      />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => {
@@ -210,6 +206,6 @@ export function DashboardHome() {
           </CardContent>
         </Card>
       </section>
-    </div>
+    </PageContainer>
   );
 }
