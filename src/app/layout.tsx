@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 
 import { AppHeader } from "@/components/layout/app-header";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { ReadinessWidget } from "@/components/dashboard/readiness-widget";
 import {
   SidebarInset,
   SidebarProvider,
@@ -59,7 +60,9 @@ export default function RootLayout({
             <React.Suspense
               fallback={<div className="h-14 border-b bg-background" />}
             >
-              <AppHeader />
+              <AppHeader
+                actions={<ReadinessWidget score={32} />}
+              />
             </React.Suspense>
             <div className="flex-1 min-w-0">{children}</div>
           </SidebarInset>

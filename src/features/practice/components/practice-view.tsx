@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import {
+  BookOpen,
   Code2,
   Filter,
   RotateCcw,
@@ -28,6 +29,7 @@ import {
   ProblemDifficulty,
 } from "../types";
 import { cn } from "@/lib/utils";
+import { McqWorkspace } from "./mcq-workspace";
 
 const CATEGORIES: ProblemCategory[] = [
   "All",
@@ -73,6 +75,22 @@ export function PracticeView() {
 
   const [activeProblem, setActiveProblem] =
     React.useState<PracticeProblem | null>(null);
+  const [practiceMode, setPracticeMode] = React.useState(false);
+
+  function openProblemDetails(problem: PracticeProblem) {
+    setActiveProblem(problem);
+    setPracticeMode(false);
+  }
+
+  function openPracticeMode(problem: PracticeProblem) {
+    setActiveProblem(problem);
+    setPracticeMode(true);
+  }
+
+  function closeDrawer() {
+    setActiveProblem(null);
+    setPracticeMode(false);
+  }
 
   // Filtered dataset
   const filteredProblems = React.useMemo(() => {
@@ -294,13 +312,24 @@ export function PracticeView() {
                   </div>
 
                   <div className="flex shrink-0 items-center gap-2">
+                    {problem.mcqQuestions && problem.mcqQuestions.length > 0 && (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => openPracticeMode(problem)}
+                        className="h-8 gap-1.5 text-xs font-medium"
+                      >
+                        <BookOpen className="size-3.5" />
+                        Practice
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setActiveProblem(problem)}
+                      onClick={() => openProblemDetails(problem)}
                       className="h-8 text-xs font-medium"
                     >
-                      <span>Problem Details</span>
+                      Details
                     </Button>
                   </div>
                 </div>
@@ -310,16 +339,17 @@ export function PracticeView() {
         </div>
       )}
 
-      {/* Problem Quick Review Drawer */}
+      {/* Problem Drawer — Details or MCQ Practice */}
       <Sheet
         open={Boolean(activeProblem)}
-        onOpenChange={(open) => !open && setActiveProblem(null)}
+        onOpenChange={(open) => !open && closeDrawer()}
       >
-        <SheetContent side="right" className="sm:max-w-md p-6 flex flex-col justify-between">
+        <SheetContent side="right" className="sm:max-w-lg p-0 flex flex-col">
           {activeProblem && (
-            <div className="space-y-6">
-              <SheetHeader className="space-y-2 text-left">
-                <div className="flex items-center gap-2">
+            <>
+              {/* Header */}
+              <div className="space-y-3 border-b p-6">
+                <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline" className="text-[10px]">
                     {activeProblem.category}
                   </Badge>
@@ -340,56 +370,105 @@ export function PracticeView() {
                   </span>
                 </div>
 
-                <SheetTitle className="font-heading text-xl font-semibold tracking-tight text-foreground">
-                  {activeProblem.title}
-                </SheetTitle>
+                <SheetHeader className="space-y-1 text-left p-0">
+                  <SheetTitle className="font-heading text-lg font-semibold tracking-tight text-foreground leading-snug">
+                    {activeProblem.title}
+                  </SheetTitle>
+                  <SheetDescription className="text-xs text-muted-foreground">
+                    {activeProblem.id}
+                  </SheetDescription>
+                </SheetHeader>
 
-                <SheetDescription className="text-xs text-muted-foreground">
-                  Problem ID: {activeProblem.id}
-                </SheetDescription>
-              </SheetHeader>
-
-              {/* Problem Notes */}
-              <div className="space-y-4 rounded-xl border bg-muted/20 p-4">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  <Code2 className="size-3.5" />
-                  <span>Problem Focus & Approach</span>
-                </div>
-
-                <p className="text-xs leading-relaxed text-foreground/90">
-                  {activeProblem.starterNote}
-                </p>
-
-                <div className="space-y-1.5 border-t pt-3">
-                  <span className="text-[11px] font-medium text-foreground">
-                    Associated topics & tags:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeProblem.tags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="secondary"
-                        className="text-[11px] font-normal"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
+                {/* Mode toggle if MCQ available */}
+                {activeProblem.mcqQuestions && activeProblem.mcqQuestions.length > 0 && (
+                  <div className="flex gap-1 rounded-lg border bg-muted/30 p-1 w-fit">
+                    <button
+                      type="button"
+                      onClick={() => setPracticeMode(false)}
+                      className={cn(
+                        "rounded-md px-3 py-1 text-xs font-medium transition-colors",
+                        !practiceMode
+                          ? "bg-background text-foreground shadow-xs"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      Overview
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPracticeMode(true)}
+                      className={cn(
+                        "rounded-md px-3 py-1 text-xs font-medium transition-colors",
+                        practiceMode
+                          ? "bg-background text-foreground shadow-xs"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      Practice MCQ
+                    </button>
                   </div>
-                </div>
+                )}
               </div>
-            </div>
-          )}
 
-          <div className="border-t pt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setActiveProblem(null)}
-              className="w-full text-xs"
-            >
-              Close
-            </Button>
-          </div>
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto p-6">
+                {!practiceMode ? (
+                  <div className="space-y-4">
+                    <div className="space-y-3 rounded-xl border bg-muted/20 p-4">
+                      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        <Code2 className="size-3.5" />
+                        <span>Problem Focus & Approach</span>
+                      </div>
+                      <p className="text-xs leading-relaxed text-foreground/90">
+                        {activeProblem.starterNote ?? "No notes available."}
+                      </p>
+                      <div className="space-y-1.5 border-t pt-3">
+                        <span className="text-[11px] font-medium text-foreground">
+                          Tags:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {activeProblem.tags.map((tag) => (
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="text-[11px] font-normal"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    {activeProblem.mcqQuestions && activeProblem.mcqQuestions.length > 0 && (
+                      <Button
+                        size="sm"
+                        className="w-full gap-1.5 text-xs"
+                        onClick={() => setPracticeMode(true)}
+                      >
+                        <BookOpen className="size-3.5" />
+                        Start MCQ Practice ({activeProblem.mcqQuestions.length} question
+                        {activeProblem.mcqQuestions.length > 1 ? "s" : ""})
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  <McqWorkspace key={activeProblem.id} problem={activeProblem} />
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="border-t p-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={closeDrawer}
+                  className="w-full text-xs"
+                >
+                  Close
+                </Button>
+              </div>
+            </>
+          )}
         </SheetContent>
       </Sheet>
     </div>
