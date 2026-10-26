@@ -12,6 +12,7 @@ import {
 import { PageContainer } from "@/components/layout/page-container";
 import { PageHeading } from "@/components/layout/page-heading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MasteryHeatmap } from "@/components/dashboard/mastery-heatmap";
 
 const stats = [
   {
@@ -177,6 +178,9 @@ export function DashboardHome() {
           })}
         </div>
       </section>
+
+      {/* Mastery heatmap — BKT per-subtopic mastery overview */}
+      <MasteryHeatmap />
 
       <section>
         <Card className="shadow-none">
