@@ -5,6 +5,7 @@ import {
   BrainCircuit,
   Code2,
   Flame,
+  Layers,
   Target,
   Trophy,
 } from "lucide-react";
@@ -65,6 +66,12 @@ const subjects = [
     description: "Networking models, protocols, and core concepts.",
     href: "/subjects/cn",
     icon: Target,
+  },
+  {
+    title: "OOP Concepts",
+    description: "Classes, inheritance, polymorphism, and design patterns.",
+    href: "/subjects/oops",
+    icon: Layers,
   },
 ];
 

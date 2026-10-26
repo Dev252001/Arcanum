@@ -9,17 +9,14 @@ import {
   BrainCircuit,
   BriefcaseBusiness,
   CalendarDays,
-  ChevronDown,
   Code2,
   Compass,
   Database,
   GraduationCap,
   LayoutDashboard,
   Network,
-  PanelLeft,
   Settings2,
   ShieldCheck,
-  Sparkles,
   Terminal,
   Trophy,
   Waypoints,
@@ -194,10 +191,10 @@ export function AppSidebar() {
 
         <div className="flex items-center gap-2 px-2 pb-1 pt-3 group-data-[collapsible=icon]:hidden">
           <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
-            A
+            D
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium">Animesh</p>
+            <p className="truncate text-sm font-medium">Devashish</p>
             <p className="truncate text-xs text-muted-foreground">
               Learner account
             </p>

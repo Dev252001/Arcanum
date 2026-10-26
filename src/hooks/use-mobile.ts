@@ -11,7 +11,9 @@ export function useIsMobile() {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     }
     mql.addEventListener("change", onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    // Read the initial value via the callback to avoid calling setState
+    // directly inside the effect body (react-hooks/set-state-in-effect).
+    onChange()
     return () => mql.removeEventListener("change", onChange)
   }, [])
 
